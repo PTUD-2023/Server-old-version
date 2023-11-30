@@ -15,7 +15,7 @@ import java.util.Date;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    private static final Logger logger = LoggerFactory.getLogger("FacebookSever");
+    private static final Logger logger = LoggerFactory.getLogger("Insurance Server");
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<CustomErrorResponse> handleUnwantedException(Exception e) {
@@ -48,6 +48,6 @@ public class GlobalExceptionHandler {
     {
         logger.error(e.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new CustomErrorResponse(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),"EmailAlreadyExist","Email đã tồn tại",new Date()));
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),"EmailAlreadyExist","Email Already Exist",new Date()));
     }
 }
