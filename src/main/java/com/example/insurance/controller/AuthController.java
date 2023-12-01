@@ -79,7 +79,7 @@ public class AuthController {
         Object principal = authentication.getPrincipal();
         if(userAccountService.getUserByEmail(((UserDetails) principal).getUsername()).get().getStatus().equals("not_activated"))
         {
-            return ResponseEntity.status(HttpStatus.OK).body(new CustomErrorResponse(HttpStatus.BAD_REQUEST.value(), "UnverifiedAccount","Account has not verified email",new Date()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CustomErrorResponse(HttpStatus.BAD_REQUEST.value(), "UnverifiedAccount","Account has not verified email",new Date()));
         }
         else if (authentication.isAuthenticated()) {
             RefreshToken refreshToken = refreshTokenService.createRefreshToken(signUpRequest.getEmail());
@@ -110,7 +110,7 @@ public class AuthController {
     {
         ConfirmCode confirmCode=  confirmCodeService.createConfirmCode(userAccount.getEmail());
         String confirmationUrl =env.getProperty("client.URL")
-                +"/authenticate/"+ Base64Encoding.encodeStringToBase64(userAccount.getEmail());
+                +"/confirm/"+ Base64Encoding.encodeStringToBase64(userAccount.getEmail());
 
         String to = userAccount.getEmail();
         String subject =confirmCode.getCode()+ " là mã xác nhận của bạn";
