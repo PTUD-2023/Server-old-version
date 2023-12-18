@@ -36,7 +36,7 @@ public class UserAccountController {
                 String email = jwtService.extractUsername(jwtToken);
                 Optional<UserAccount> userAccount = userAccountService.getUserByEmail(email);
                 if(userAccount.isPresent())
-                return ResponseEntity.status(HttpStatus.OK).body(MapEntityToDTO.mapUserAccountToDTO(userAccount.get()));
+                    return ResponseEntity.status(HttpStatus.OK).body(MapEntityToDTO.mapUserAccountToDTO(userAccount.get()));
             }
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         } catch (Exception e) {
