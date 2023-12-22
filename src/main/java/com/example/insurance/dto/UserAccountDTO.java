@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-@JsonIgnoreProperties(value = {"id","password","role","status","timeUpdated"})
+@JsonIgnoreProperties(value = {"id","password","status","timeUpdated"})
 public class UserAccountDTO {
     private String email;
     private String lastName;
@@ -18,4 +18,5 @@ public class UserAccountDTO {
     private String gender;
     private String avatar;
     private Date timeCreated;
+    private String role;
 }
