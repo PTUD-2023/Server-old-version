@@ -45,7 +45,7 @@ create table user_accounts
     updated_at timestamp              default current_timestamp on update current_timestamp null,
     status varchar(20) default 'not_activated',
     unique (email,CMND),
-    foreign key (health_infor_id) references health_insurance(id)
+    foreign key (health_infor_id) references health_information(id)
 );
 
 create table refresh_token
@@ -81,7 +81,7 @@ create table relatives
     relationship_with_buyers text not null,
     created_at timestamp              default current_timestamp                             null,
     updated_at timestamp              default current_timestamp on update current_timestamp null,
-    foreign key (health_infor_id) references health_insurance(id),
+    foreign key (health_infor_id) references health_information(id),
     foreign key (user_account_id) references user_accounts(id)
 );
 
@@ -120,6 +120,7 @@ create table insurance_payment
     created_at timestamp              default current_timestamp                             null,
     updated_at timestamp              default current_timestamp on update current_timestamp null,
     status varchar(20) default 'unpaid',
+    insurance_type_id bigint not null,
     foreign key (insurance_type_id) references insurance_type(id)
 );
 
