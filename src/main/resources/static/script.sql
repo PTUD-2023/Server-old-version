@@ -44,12 +44,7 @@ create table user_accounts
     created_at timestamp              default current_timestamp                             null,
     updated_at timestamp              default current_timestamp on update current_timestamp null,
     status varchar(20) default 'not_activated',
-<<<<<<< HEAD
     unique (email)
-=======
-    unique (email,CMND),
-    foreign key (health_infor_id) references health_information(id)
->>>>>>> ed4b8ede81154ff453bf1c3d5003d216d720380b
 );
 
 create table refresh_token
@@ -84,25 +79,8 @@ create table insured_person
     health_infor_id bigint,
     created_at timestamp              default current_timestamp                             null,
     updated_at timestamp              default current_timestamp on update current_timestamp null,
-<<<<<<< HEAD
     status varchar(20) default 'uninsured',
     foreign key (health_infor_id) references health_information(id)
-=======
-    foreign key (health_infor_id) references health_information(id),
-    foreign key (user_account_id) references user_accounts(id)
-);
-
-create table insurance_type
-(
-    id         bigint auto_increment primary key,
-    type_name text,
-    description text,
-    coverage_details text,
-    premium_rate float,
-    created_at timestamp              default current_timestamp                             null,
-    updated_at timestamp              default current_timestamp on update current_timestamp null,
-    status varchar(20) default 'activated'
->>>>>>> ed4b8ede81154ff453bf1c3d5003d216d720380b
 );
 
 create table insurance_plan
@@ -124,23 +102,6 @@ create table insurance_plan
     status varchar(20) default 'activated'
 );
 
-<<<<<<< HEAD
-=======
-create table insurance_payment
-(
-    id         bigint auto_increment primary key,
-    amount int not null,
-    payment_date date not null,
-    payment_method varchar(20) not null,
-    created_at timestamp              default current_timestamp                             null,
-    updated_at timestamp              default current_timestamp on update current_timestamp null,
-    status varchar(20) default 'unpaid',
-    insurance_type_id bigint not null,
-    foreign key (insurance_type_id) references insurance_type(id)
-);
-
-
->>>>>>> ed4b8ede81154ff453bf1c3d5003d216d720380b
 create table registration_form
 (
     id         bigint auto_increment primary key,
