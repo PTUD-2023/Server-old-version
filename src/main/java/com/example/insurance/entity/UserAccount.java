@@ -34,6 +34,10 @@ public class UserAccount {
     private String gender;
     @Column(name = "avatar",columnDefinition = "json")
     private String avatar;
+    @Column(name = "CMND")
+    private String CMND;
+    @Column(name = "address")
+    private String address;
     @Column(name = "status")
     private String status;
     @Column(name = "created_at")

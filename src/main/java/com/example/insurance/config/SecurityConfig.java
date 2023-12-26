@@ -44,6 +44,8 @@ public class SecurityConfig {
                 .cors(cors->cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests((authorize)->authorize
                         .requestMatchers("/v1/authenticate/**").permitAll()
+                        .requestMatchers("/v1/insurance-plan/**").permitAll()
+                        .requestMatchers("/v1/insurance-price/**").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
