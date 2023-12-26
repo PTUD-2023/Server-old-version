@@ -1,5 +1,6 @@
 package com.example.insurance.service;
 
+import com.example.insurance.entity.RegistrationForm;
 import com.example.insurance.entity.UserAccount;
 import com.example.insurance.repository.UserAccountRepository;
 import org.slf4j.Logger;
@@ -36,6 +37,10 @@ public class UserAccountService implements UserDetailsService {
         return userAccountRepository.findByEmail(email);
     }
 
+    public Optional<UserAccount> getUserById(Long id)
+    {
+        return userAccountRepository.findById(id);
+    }
 
     public UserAccount signUpNewAccount(UserAccount userAccount)
     {
