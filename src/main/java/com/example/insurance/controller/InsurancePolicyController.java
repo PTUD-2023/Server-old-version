@@ -99,4 +99,15 @@ public class InsurancePolicyController {
             return ResponseEntity.status(e.getErrorCode()).body(e.getMessage());
         }
     }
+
+    @PostMapping("/remove/{id}")
+    public ResponseEntity<?> removeInsurancePolicy(@PathVariable Long id)
+    {
+        try {
+            insurancePolicyService.removeInsurancePolicy(id);
+            return ResponseEntity.status(HttpStatus.OK).body("Remove insurance policy successful!");
+        } catch (CustomException e) {
+            return ResponseEntity.status(e.getErrorCode()).body(e.getMessage());
+        }
+    }
 }

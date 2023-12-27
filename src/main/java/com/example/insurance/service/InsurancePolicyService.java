@@ -1,6 +1,7 @@
 package com.example.insurance.service;
 
 import com.example.insurance.dto.InsurancePolicyDTO;
+import com.example.insurance.entity.InsurancePlan;
 import com.example.insurance.entity.InsurancePolicy;
 import com.example.insurance.entity.RegistrationForm;
 import com.example.insurance.entity.UserAccount;
@@ -78,6 +79,16 @@ public class InsurancePolicyService {
         policy.setUpdatedAt(new Date());
 
         insurancePolicyRepository.save(policy);
+    }
+
+    public void removeInsurancePolicy(Long id)
+    {
+        Optional<InsurancePolicy> insurancePolicy = insurancePolicyRepository.findById(id);
+        if (insurancePolicy.isEmpty()) {
+            throw new CustomException(HttpStatus.NOT_FOUND.value(), "NotFound","Insurance policy does not exist!");
+        }
+
+        insurancePolicyRepository.delete(insurancePolicy.get());
     }
 
     public InsurancePolicy mapDTOToInsurancePolicy(InsurancePolicyDTO dto)

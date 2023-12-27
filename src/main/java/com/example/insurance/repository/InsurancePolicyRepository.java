@@ -1,9 +1,6 @@
 package com.example.insurance.repository;
 
 import com.example.insurance.entity.InsurancePolicy;
-import com.example.insurance.entity.Policy;
-import com.example.insurance.entity.RegistrationForm;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
