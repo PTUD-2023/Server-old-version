@@ -6,10 +6,12 @@ import com.example.insurance.entity.InsuredPerson;
 import com.example.insurance.entity.RegistrationForm;
 import com.example.insurance.entity.UserAccount;
 import com.example.insurance.exception.CustomException;
+import com.example.insurance.repository.InsurancePlanRepository;
+import com.example.insurance.repository.InsuredPersonRepository;
 import com.example.insurance.repository.RegistrationFormRepository;
+import com.example.insurance.repository.UserAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -17,20 +19,20 @@ import java.util.Optional;
 @Service
 public class RegistrationFormService {
     private final RegistrationFormRepository registrationFormRepository;
-    private final UserAccountService userAccountService;
-    private final InsurancePlanService insurancePlanService;
-    private final InsuredPersonService insuredPersonService;
+    private final UserAccountRepository userAccountRepository;
+    private final InsurancePlanRepository insurancePlanRepository;
+    private final InsuredPersonRepository insuredPersonRepository;
 
     @Autowired
     public RegistrationFormService(RegistrationFormRepository registrationFormRepository,
-                                   UserAccountService userAccountService,
-                                   InsurancePlanService insurancePlanService,
-                                   InsuredPersonService insuredPersonService)
+                                   UserAccountRepository userAccountRepository,
+                                   InsurancePlanRepository insurancePlanRepository,
+                                   InsuredPersonRepository insuredPersonRepository)
     {
         this.registrationFormRepository = registrationFormRepository;
-        this.userAccountService = userAccountService;
-        this.insurancePlanService = insurancePlanService;
-        this.insuredPersonService = insuredPersonService;
+        this.userAccountRepository = userAccountRepository;
+        this.insurancePlanRepository = insurancePlanRepository;
+        this.insuredPersonRepository = insuredPersonRepository;
     }
 
     public Iterable<RegistrationForm> getAllRegistrationForm()
@@ -57,7 +59,7 @@ public class RegistrationFormService {
             registrationFormRepository.save(registrationForm.get());
         }
         else
-            throw new CustomException(HttpStatus.BAD_REQUEST.value(), "NotFound","Registration form does not exist!");
+            throw new CustomException(HttpStatus.NOT_FOUND.value(), "NotFound","Registration form does not exist!");
 
     }
 
@@ -70,7 +72,7 @@ public class RegistrationFormService {
             registrationFormRepository.save(registrationForm.get());
         }
         else
-            throw new CustomException(HttpStatus.BAD_REQUEST.value(), "NotFound","Registration form does not exist!");
+            throw new CustomException(HttpStatus.NOT_FOUND.value(), "NotFound","Registration form does not exist!");
 
     }
 
@@ -82,7 +84,7 @@ public class RegistrationFormService {
             registrationFormRepository.delete(registrationForm.get());
         }
         else
-            throw new CustomException(HttpStatus.BAD_REQUEST.value(), "NotFound","Registration form does not exist!");
+            throw new CustomException(HttpStatus.NOT_FOUND.value(), "NotFound","Registration form does not exist!");
 
     }
 
@@ -91,20 +93,20 @@ public class RegistrationFormService {
 
         RegistrationForm registrationForm = new RegistrationForm();
 
-        Optional<UserAccount> userAccount = userAccountService.getUserById(registrationFormDTO.getUserAccountId());
+        Optional<UserAccount> userAccount = userAccountRepository.findById(registrationFormDTO.getUserAccountId());
         if(userAccount.isEmpty())
         {
-            throw new UsernameNotFoundException("Account does not exist!");
+            throw new CustomException(HttpStatus.NOT_FOUND.value(), "NotFound","Account does not exist!");
         }
-        Optional<InsurancePlan> insurancePlan = insurancePlanService.findInsurancePlanById(registrationFormDTO.getInsurancePlanId());
+        Optional<InsurancePlan> insurancePlan = insurancePlanRepository.findById(registrationFormDTO.getInsurancePlanId());
         if(insurancePlan.isEmpty())
         {
-            throw new UsernameNotFoundException("Insurance plan does not exist!");
+            throw new CustomException(HttpStatus.NOT_FOUND.value(), "NotFound","Insurance plan does not exist!");
         }
-        Optional<InsuredPerson> insuredPerson = insuredPersonService.findInsuredPersonById(registrationFormDTO.getInsuredPersonId());
+        Optional<InsuredPerson> insuredPerson = insuredPersonRepository.findById(registrationFormDTO.getInsuredPersonId());
         if(insuredPerson.isEmpty())
         {
-            throw new UsernameNotFoundException("Insured person does not exist!");
+            throw new CustomException(HttpStatus.NOT_FOUND.value(), "NotFound","Insured person does not exist!");
         }
 
         registrationForm.setApplyDate(registrationFormDTO.getApplyDate());

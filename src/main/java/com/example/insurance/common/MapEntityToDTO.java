@@ -16,15 +16,4 @@ public class MapEntityToDTO {
 
     }
 
-    public static HealthInformationDTO mapHealthInformationToDTO(HealthInformation healthInformation)
-    {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.convertValue(healthInformation,HealthInformationDTO.class);
-    }
-
-    public static RegistrationFormDTO mapRegistrationFormToDTO(RegistrationForm registrationForm)
-    {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.convertValue(registrationForm, RegistrationFormDTO.class);
-    }
 }

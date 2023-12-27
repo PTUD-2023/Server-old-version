@@ -2,10 +2,12 @@ package com.example.insurance.controller;
 
 import com.example.insurance.common.MapEntityToDTO;
 import com.example.insurance.entity.RegistrationForm;
+import com.example.insurance.exception.CustomException;
 import com.example.insurance.service.RegistrationFormService;
 import com.example.insurance.dto.RegistrationFormDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,8 +33,8 @@ public class RegistrationFormController {
                 registrationFormDTOs.add(registrationFormService.mapRegistrationFormToDTO(registrationForm));
             }
             return ResponseEntity.status(HttpStatus.OK).body(registrationFormDTOs);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        } catch (CustomException e) {
+            return ResponseEntity.status(e.getErrorCode()).body(e.getMessage());
         }
     }
 
@@ -45,8 +47,8 @@ public class RegistrationFormController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Registration form does not exist!");
             }
             return ResponseEntity.status(HttpStatus.OK).body(registrationFormService.mapRegistrationFormToDTO(registrationForm.get()));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        } catch (CustomException e) {
+            return ResponseEntity.status(e.getErrorCode()).body(e.getMessage());
         }
     }
 
@@ -56,8 +58,8 @@ public class RegistrationFormController {
             RegistrationForm registrationForm = registrationFormService.mapDTOToRegistrationForm(registrationFormDTO);
             registrationFormService.createRegistrationForm(registrationForm);
             return ResponseEntity.status(HttpStatus.CREATED).body("Send Registration Successful");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        } catch (CustomException e) {
+            return ResponseEntity.status(e.getErrorCode()).body(e.getMessage());
         }
     }
 
@@ -67,8 +69,8 @@ public class RegistrationFormController {
         try {
             registrationFormService.approveRegistrationForm(formId);
             return ResponseEntity.status(HttpStatus.OK).body("Registration form approved successfully!");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        } catch (CustomException e) {
+            return ResponseEntity.status(e.getErrorCode()).body(e.getMessage());
         }
     }
 
@@ -77,8 +79,8 @@ public class RegistrationFormController {
         try {
             registrationFormService.cancelRegistrationForm(formId);
             return ResponseEntity.status(HttpStatus.OK).body("Registration form cancelled successfully!");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        } catch (CustomException e) {
+            return ResponseEntity.status(e.getErrorCode()).body(e.getMessage());
         }
     }
 
@@ -87,8 +89,8 @@ public class RegistrationFormController {
         try {
             registrationFormService.removeRegistrationForm(formId);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        } catch (CustomException e) {
+            return ResponseEntity.status(e.getErrorCode()).body(e.getMessage());
         }
     }
 }
