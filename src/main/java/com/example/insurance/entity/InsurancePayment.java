@@ -10,26 +10,28 @@ import java.util.Date;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "health_information")
+@Table(name = "insurance_payment")
 @Data
-public class HealthInformation {
+public class InsurancePayment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "general_health_condition")
-    private String generalHealthCondition;
-    @Column(name = "medical_history")
-    private String medicalHistory;
-    @Column(name = "medicines_and_treatment")
-    private String medicinesAndTreatment;
-    @Column(name = "family_history")
-    private String familyHistory;
-    @Column(name = "lifestyle_and_risk_factors")
-    private String lifestyleAndRiskFactors;
+    private Integer amount;
+    @Column(name = "additional_cost")
+    private Integer additionalCost;
+    @Column(name = "payment_date")
+    @Temporal(TemporalType.DATE)
+    private Date paymentDate;
+    @Column(name = "payment_method")
+    private String paymentMethod;
+    @ManyToOne
+    @JoinColumn(name = "insurance_policy_id", referencedColumnName = "id")
+    private InsurancePolicy insurancePolicy;
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
+    private String status;
 }

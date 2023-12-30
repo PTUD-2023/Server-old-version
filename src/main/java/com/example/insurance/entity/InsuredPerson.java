@@ -3,38 +3,42 @@ package com.example.insurance.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.sql.Timestamp;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import java.util.Date;
 
 @Entity
+@DynamicInsert
+@DynamicUpdate
+@Table(name = "insured_person")
+
 @Data
 public class InsuredPerson {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    @Column(nullable = false)
+    private Long id;
     private String name;
-    @Column(name = "email",length = 50)
     private String email;
-    @Column(name = "phone",length = 20)
     private String phone;
-    @Column(name = "birthday", nullable = false)
-    private Date birthDay;
-    @Column(nullable = false)
+    @Column(name = "birthday")
+    @Temporal(TemporalType.DATE)
+    private Date birthday;
     private String gender;
-    @Column(nullable = false,columnDefinition = "text")
     private String address;
-    @Column(name = "CMND",length = 9)
-    private String CMND;
-    @Column(name = "relationship_with_buyers",columnDefinition = "text",nullable = false)
-    private String relationshipWithBuyers;
+    @Column(name = "CMND")
+    private String IDCard;
     @OneToOne
-    @JoinColumn(name = "health_infor_id",referencedColumnName = "id")
-    private HealthInformation healthInformationId;
-    @Column(name = "created_at", columnDefinition = "timestamp default current_timestamp")
-    private Timestamp createdAt;
-    @Column(name = "updated_at", columnDefinition = "timestamp default current_timestamp on update current_timestamp")
-    private Timestamp updatedAt;
-    @Column(name = "status", columnDefinition = "varhar(20) default 'uninsured'")
+    @JoinColumn(name = "health_infor_id", referencedColumnName = "id")
+    private HealthInformation healthInformation;
+    @Column(name = "relationship_with_buyers")
+    private String relationshipWithBuyers;
+    @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+    @Column(name = "updated_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedAt;
+    @Column(name = "status", length = 20, nullable = false, columnDefinition = "varchar(20) default 'activated'")
     private String status;
 }
