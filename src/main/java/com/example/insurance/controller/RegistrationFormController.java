@@ -1,5 +1,7 @@
 package com.example.insurance.controller;
 
+import com.example.insurance.common.CustomErrorResponse;
+import com.example.insurance.common.CustomSuccessResponse;
 import com.example.insurance.common.MapEntityToDTO;
 import com.example.insurance.entity.RegistrationForm;
 import com.example.insurance.exception.CustomException;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,73 +27,62 @@ public class RegistrationFormController {
         this.registrationFormService = registrationFormService;
     }
 
-    @GetMapping("")
+    @GetMapping("/get")
     public ResponseEntity<?> getAllRegistrationForm() {
-        try {
-            Iterable<RegistrationForm> registrationForms = registrationFormService.getAllRegistrationForm();
-            List<RegistrationFormDTO> registrationFormDTOs = new ArrayList<>();
-            for (RegistrationForm registrationForm : registrationForms) {
-                registrationFormDTOs.add(registrationFormService.mapRegistrationFormToDTO(registrationForm));
-            }
-            return ResponseEntity.status(HttpStatus.OK).body(registrationFormDTOs);
-        } catch (CustomException e) {
-            return ResponseEntity.status(e.getErrorCode()).body(e.getMessage());
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(registrationFormService.getAllRegistrationForm());
     }
 
-    @GetMapping("/{formId}")
+    @GetMapping("/get/{formId}")
     public ResponseEntity<?> getRegistrationFormById(@PathVariable Long formId) {
-        try {
-            Optional<RegistrationForm> registrationForm = registrationFormService.getRegistrationFormById(formId);
-            if(registrationForm.isEmpty())
-            {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Registration form does not exist!");
-            }
-            return ResponseEntity.status(HttpStatus.OK).body(registrationFormService.mapRegistrationFormToDTO(registrationForm.get()));
-        } catch (CustomException e) {
-            return ResponseEntity.status(e.getErrorCode()).body(e.getMessage());
+        RegistrationFormDTO registrationFormDTO = registrationFormService.getRegistrationFormDTOById(formId);
+        if(registrationFormDTO == null)
+        {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new CustomErrorResponse(HttpStatus.NOT_FOUND.value(),"RegistrationFormNotFound","Không thể tìm thấy đơn đăng kí",new Date()));
         }
+        return ResponseEntity.status(HttpStatus.OK).body(registrationFormDTO);
     }
 
-    @PostMapping("/create-form")
+    @PostMapping("/create")
     public ResponseEntity<?> createRegistrationForm(@RequestBody RegistrationFormDTO registrationFormDTO) {
-        try {
-            RegistrationForm registrationForm = registrationFormService.mapDTOToRegistrationForm(registrationFormDTO);
-            registrationFormService.createRegistrationForm(registrationForm);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Send Registration Successful");
-        } catch (CustomException e) {
-            return ResponseEntity.status(e.getErrorCode()).body(e.getMessage());
-        }
+        registrationFormService.createRegistrationForm(registrationFormDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Gửi đơn đăng kí thành công!!");
     }
 
 
     @PutMapping("/approve-form/{formId}")
     public ResponseEntity<?> approveRegistrationForm(@PathVariable Long formId) {
-        try {
-            registrationFormService.approveRegistrationForm(formId);
-            return ResponseEntity.status(HttpStatus.OK).body("Registration form approved successfully!");
-        } catch (CustomException e) {
-            return ResponseEntity.status(e.getErrorCode()).body(e.getMessage());
+        RegistrationFormDTO registrationForm = registrationFormService.getRegistrationFormDTOById(formId);
+        if(registrationForm == null)
+        {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new CustomErrorResponse(HttpStatus.NOT_FOUND.value(),"RegistrationFormNotFound","Không thể tìm thấy đơn đăng kí",new Date()));
         }
+        registrationFormService.approveRegistrationForm(formId);
+        return ResponseEntity.status(HttpStatus.OK).body("Đơn đăng kí đã được duyệt thành công!!");
     }
 
     @PutMapping("/cancel-form/{formId}")
     public ResponseEntity<?> cancelRegistrationForm(@PathVariable Long formId) {
-        try {
-            registrationFormService.cancelRegistrationForm(formId);
-            return ResponseEntity.status(HttpStatus.OK).body("Registration form cancelled successfully!");
-        } catch (CustomException e) {
-            return ResponseEntity.status(e.getErrorCode()).body(e.getMessage());
+        RegistrationFormDTO registrationForm = registrationFormService.getRegistrationFormDTOById(formId);
+        if(registrationForm == null)
+        {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new CustomErrorResponse(HttpStatus.NOT_FOUND.value(),"RegistrationFormNotFound","Không thể tìm thấy đơn đăng kí",new Date()));
         }
+        registrationFormService.cancelRegistrationForm(formId);
+        return ResponseEntity.status(HttpStatus.OK).body("Đơn đăng kí đã được hủy!!");
     }
 
-    @DeleteMapping("/{formId}")
+    @DeleteMapping("/delete/{formId}")
     public ResponseEntity<?> removeRegistrationForm(@PathVariable Long formId) {
-        try {
-            registrationFormService.removeRegistrationForm(formId);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        } catch (CustomException e) {
-            return ResponseEntity.status(e.getErrorCode()).body(e.getMessage());
+        RegistrationForm registrationForm = registrationFormService.getRegistrationFormById(formId);
+        if (registrationForm == null)
+        {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new CustomErrorResponse(HttpStatus.NOT_FOUND.value(),"RegistrationFormNotFound","Không thể tìm thấy đơn đăng kí",new Date()));
         }
+        if (registrationForm.getStatus().equals("Approved"))
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CustomErrorResponse(HttpStatus.BAD_REQUEST.value(),"BadRequest","Đơn đăng kí đã được duyệt không thể bị xóa",new Date()));
+        }
+        registrationFormService.removeRegistrationForm(formId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

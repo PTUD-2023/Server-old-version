@@ -1,5 +1,8 @@
 package com.example.insurance.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.DynamicInsert;
@@ -12,30 +15,43 @@ import java.util.Date;
 @DynamicUpdate
 @Table(name = "insured_person")
 @Data
+@JsonIdentityInfo(scope = InsuredPerson.class, generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class InsuredPerson {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
+
     private String email;
+
     private String phone;
+
     @Column(name = "birthday")
     @Temporal(TemporalType.DATE)
     private Date birthday;
+
     private String gender;
+
     private String address;
+
     @Column(name = "CMND")
     private String IDCard;
-    @OneToOne
+
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "health_infor_id", referencedColumnName = "id")
     private HealthInformation healthInformation;
+
     @Column(name = "relationship_with_buyers")
     private String relationshipWithBuyers;
+
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
+
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
+
     private String status;
 }

@@ -1,17 +1,24 @@
 package com.example.insurance.entity;
 
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "user_accounts")
 @Data
+@ToString
+@JsonIdentityInfo(scope = UserAccount.class, generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class UserAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +41,10 @@ public class UserAccount {
     private String gender;
     @Column(name = "avatar",columnDefinition = "json")
     private String avatar;
+    @Column(name = "CMND")
+    private String CMND;
+    @Column(name = "address")
+    private String address;
     @Column(name = "status")
     private String status;
     @Column(name = "created_at")
@@ -42,4 +53,10 @@ public class UserAccount {
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date timeUpdated;
+
+    @OneToMany(mappedBy = "userAccount", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RegistrationForm> forms;
+
+    @OneToMany(mappedBy = "userAccount", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ClaimRequest> claimRequests;
 }

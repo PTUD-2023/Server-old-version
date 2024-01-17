@@ -1,6 +1,7 @@
 package com.example.insurance.service;
 
-import com.example.insurance.entity.RegistrationForm;
+import com.example.insurance.common.MapEntityToDTO;
+import com.example.insurance.dto.UserAccountDTO;
 import com.example.insurance.entity.UserAccount;
 import com.example.insurance.repository.UserAccountRepository;
 import org.slf4j.Logger;
@@ -33,6 +34,12 @@ public class UserAccountService implements UserDetailsService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    public UserAccountDTO getUserProfileByEmail(String email) {
+        MapEntityToDTO mapEntityToDTO = MapEntityToDTO.getInstance();
+        Optional<UserAccount> userAccount = userAccountRepository.findByEmail(email);
+        return userAccount.map(mapEntityToDTO::mapUserAccountToDTO).orElse(null);
+    }
+
     public Optional<UserAccount> getUserByEmail(String email) {
         return userAccountRepository.findByEmail(email);
     }
@@ -41,6 +48,7 @@ public class UserAccountService implements UserDetailsService {
     {
         return userAccountRepository.findById(id);
     }
+
 
     public UserAccount signUpNewAccount(UserAccount userAccount)
     {

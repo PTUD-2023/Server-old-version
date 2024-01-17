@@ -29,7 +29,7 @@ public class HealthInformationController {
             Optional<HealthInformation> healthInformation = healthInformationService.findHealthInformationById(id);
             if (healthInformation.isEmpty())
             {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Health information does not exist!");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Thông tin sức khỏe không tồn tại!");
             }
             HealthInformationDTO dto = healthInformationService.mapHealthInformationToDTO(healthInformation.get());
             return ResponseEntity.status(HttpStatus.OK).body(dto);
@@ -44,7 +44,7 @@ public class HealthInformationController {
         try {
             HealthInformation healthInformation = healthInformationService.mapDTOToHealthInformation(dto);
             healthInformationService.addHealthInformation(healthInformation);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Add health information successful!");
+            return ResponseEntity.status(HttpStatus.CREATED).body("Thêm thông tin sức khỏe thành công!");
         } catch (CustomException e) {
             return ResponseEntity.status(e.getErrorCode()).body(e.getMessage());
         }
@@ -55,7 +55,7 @@ public class HealthInformationController {
     {
         try {
             healthInformationService.updateHealthInformation(id, dto);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            return ResponseEntity.status(HttpStatus.OK).body("Cập nhật thông tin sức khỏe thành công!");
         } catch (CustomException e) {
             return ResponseEntity.status(e.getErrorCode()).body(e.getMessage());
         }

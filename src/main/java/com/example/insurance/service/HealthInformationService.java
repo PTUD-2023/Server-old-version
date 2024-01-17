@@ -35,7 +35,7 @@ public class HealthInformationService {
     {
         Optional<HealthInformation> optionalHealthInformation = healthInformationRepository.findById(id);
         if (optionalHealthInformation.isEmpty()) {
-            throw new CustomException(HttpStatus.NOT_FOUND.value(), "NotFound","Health information does not exist!");
+            throw new CustomException(HttpStatus.NOT_FOUND.value(), "NotFound","Thông tin sức khỏe không tồn tại!");
         }
 
         HealthInformation healthInformation = mapDTOToHealthInformation(dto);
