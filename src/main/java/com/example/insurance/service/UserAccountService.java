@@ -44,6 +44,10 @@ public class UserAccountService implements UserDetailsService {
         return userAccountRepository.findByEmail(email);
     }
 
+    public Optional<UserAccount> getUserById(Long id)
+    {
+        return userAccountRepository.findById(id);
+    }
 
 
     public UserAccount signUpNewAccount(UserAccount userAccount)

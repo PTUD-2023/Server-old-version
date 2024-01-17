@@ -1,8 +1,9 @@
 package com.example.insurance.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -13,6 +14,9 @@ import java.util.Date;
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "insurance_plan_price")
+@ToString
+@JsonIdentityInfo(scope = InsurancePlanPrice.class, generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
+@JsonIgnoreProperties(value= {"insurancePlan"})
 public class InsurancePlanPrice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,9 +33,8 @@ public class InsurancePlanPrice {
     @Column(name = "rate")
     private float rate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "insurance_plan_id", referencedColumnName = "id")
-    @JsonBackReference
     private InsurancePlan insurancePlan;
 
     @Column(name = "effective_date")

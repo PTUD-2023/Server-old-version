@@ -39,7 +39,7 @@ public class UserAccountController {
                     return ResponseEntity.status(HttpStatus.OK).body(userAccountDTO);
                 }
                 else{
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new CustomErrorResponse(HttpStatus.NOT_FOUND.value(),"EmailNotFound","Could not find the user corresponding to the email",new Date()));
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new CustomErrorResponse(HttpStatus.NOT_FOUND.value(),"EmailNotFound","Không thể tìm thấy người dùng tương ứng với email!",new Date()));
                 }
             }
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);

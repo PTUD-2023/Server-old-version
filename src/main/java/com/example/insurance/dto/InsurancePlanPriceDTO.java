@@ -8,13 +8,9 @@ import lombok.Setter;
 @Setter
 @JsonIgnoreProperties(value = {"effectiveDate","status","insurancePlan"})
 public class InsurancePlanPriceDTO {
-
     private Long id;
     private int minAge;
-
     private int maxAge;
-
     private int price;
-
     private float rate;
 }

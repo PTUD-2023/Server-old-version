@@ -1,11 +1,7 @@
 package com.example.insurance.common;
 
-import com.example.insurance.dto.InsurancePlanDTO;
-import com.example.insurance.dto.InsurancePlanPriceDTO;
-import com.example.insurance.dto.UserAccountDTO;
-import com.example.insurance.entity.InsurancePlan;
-import com.example.insurance.entity.InsurancePlanPrice;
-import com.example.insurance.entity.UserAccount;
+import com.example.insurance.dto.*;
+import com.example.insurance.entity.*;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -39,5 +35,31 @@ public class MapEntityToDTO {
     public List<InsurancePlanPriceDTO> mapInsurancePlanPriceListToDTOList(List<InsurancePlanPrice> insurancePlanPriceList) {
         JavaType targetType = objectMapper.getTypeFactory().constructCollectionType(List.class, InsurancePlanPriceDTO.class);
         return objectMapper.convertValue(insurancePlanPriceList, targetType);
+    }
+
+    public RegistrationFormDTO mapRegistrationFormToDTO(RegistrationForm registrationForm) {
+        return objectMapper.convertValue(registrationForm, RegistrationFormDTO.class);
+    }
+
+    public List<RegistrationFormDTO> mapRegistrationFormToDTOList(List<RegistrationForm> registrationFormList) {
+        JavaType targetType = objectMapper.getTypeFactory().constructCollectionType(List.class, RegistrationFormDTO.class);
+        return objectMapper.convertValue(registrationFormList, targetType);
+    }
+
+    public RegistrationForm mapDTOToRegistrationForm(RegistrationFormDTO dto) {
+        return objectMapper.convertValue(dto, RegistrationForm.class);
+    }
+
+    public InsurancePolicyDTO mapInsurancePolicyToDTO(InsurancePolicy insurancePolicy) {
+        return objectMapper.convertValue(insurancePolicy, InsurancePolicyDTO.class);
+    }
+
+    public List<InsurancePolicyDTO> mapInsurancePolicyToDTOList(List<InsurancePolicy> insurancePolicyList) {
+        JavaType targetType = objectMapper.getTypeFactory().constructCollectionType(List.class, InsurancePolicyDTO.class);
+        return objectMapper.convertValue(insurancePolicyList, targetType);
+    }
+
+    public InsurancePolicy mapDTOToInsurancePolicy(InsurancePolicyDTO dto) {
+        return objectMapper.convertValue(dto, InsurancePolicy.class);
     }
 }

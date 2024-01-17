@@ -35,5 +35,4 @@ public class InsurancePlanService {
         return insurancePlan.map(mapEntityToDTO::mapInsurancePlanToDTO).orElse(null);
     }
 
-
 }

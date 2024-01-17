@@ -61,10 +61,10 @@ public class AuthController {
         {
             sendConfirmCodeEmail(userAccount);
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(new CustomSuccessResponse("Account registration has email " + userAccount.getEmail() + " successful","AccountIsRegistered"));
+                    .body(new CustomSuccessResponse("Đăng ký tài khoản có email " + userAccount.getEmail() + " thành công!","AccountIsRegistered"));
         }
         else{
-            return ResponseEntity.badRequest().body( new CustomErrorResponse(HttpStatus.BAD_REQUEST.value(), "RegistrationFailed","Account registration failed",new Date()));
+            return ResponseEntity.badRequest().body( new CustomErrorResponse(HttpStatus.BAD_REQUEST.value(), "RegistrationFailed","Đăng kí tài khoản thất bại!",new Date()));
         }
     }
 
@@ -79,11 +79,11 @@ public class AuthController {
         Object principal = authentication.getPrincipal();
         if(userAccountService.getUserByEmail(((UserDetails) principal).getUsername()).get().getStatus().equals("not_activated"))
         {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CustomErrorResponse(HttpStatus.BAD_REQUEST.value(), "UnverifiedAccount","Account has not verified email",new Date()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CustomErrorResponse(HttpStatus.BAD_REQUEST.value(), "UnverifiedAccount","Tài khoản chưa được kích hoạt!",new Date()));
         }
         else if (authentication.isAuthenticated()) {
             RefreshToken refreshToken = refreshTokenService.createRefreshToken(signUpRequest.getEmail());
-            return ResponseEntity.status(HttpStatus.OK).body(new SignUpResponse(jwtService.generateToken(signUpRequest.getEmail()),refreshToken.getToken(),"Success","Login is successfully")) ;
+            return ResponseEntity.status(HttpStatus.OK).body(new SignUpResponse(jwtService.generateToken(signUpRequest.getEmail()),refreshToken.getToken(),"Success","Đăng nhập thành công!")) ;
         } else {
             throw new UsernameNotFoundException("invalid user with email = " + signUpRequest.getEmail() + " request !");
         }
@@ -101,7 +101,7 @@ public class AuthController {
                     return ResponseEntity.ok().body(new SignUpResponse(token,refreshToken));
                 })
                 .orElseThrow(()->
-                        new CustomException(HttpStatus.BAD_REQUEST.value(),"RefreshTokenIsInexist","Refresh token does not exist")
+                        new CustomException(HttpStatus.BAD_REQUEST.value(),"RefreshTokenIsInexist","Refresh token không tồn tại!")
                 );
 
     }
