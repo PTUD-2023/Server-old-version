@@ -1,11 +1,9 @@
 package com.example.insurance.dto;
 
 import com.example.insurance.entity.InsurancePlanPrice;
-import com.example.insurance.entity.RegistrationForm;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
@@ -27,6 +25,7 @@ public class InsurancePlanDTO {
     private int hospitalizationAllowance;
     private int emergencyTransport;
     private int funeralAllowance;
-    private List<InsurancePlanPriceDTO> prices;
+    private List<InsurancePlanPrice> prices ;
+    private  List<InsuranceBenefitDTO> benefits;
 }
 
