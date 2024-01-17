@@ -57,6 +57,10 @@ public class InsurancePlan {
     @JsonManagedReference
     private List<InsurancePlanPrice> prices;
 
+    @OneToMany(mappedBy = "insurancePlan", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<InsuranceBenefit> benefits;
+
     @Column(name = "created_at")
     private Timestamp createdAt;
 
