@@ -1,9 +1,7 @@
 package com.example.insurance.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -12,7 +10,6 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,13 +19,6 @@ import java.util.List;
 @Table(name = "insurance_plan")
 @ToString
 @JsonIdentityInfo(scope = InsurancePlan.class, generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
-//@NamedEntityGraph(
-//        name = "InsurancePlan.pricesForms",
-//        attributeNodes = {
-//                @NamedAttributeNode(value = "prices"),
-//                @NamedAttributeNode(value = "forms")
-//        }
-//)
 public class InsurancePlan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -67,10 +57,10 @@ public class InsurancePlan {
     @Column(name = "funeral_allowance")
     private int funeralAllowance;
 
-    @OneToMany(mappedBy = "insurancePlan", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<InsurancePlanPrice> prices;;
+    @OneToMany(mappedBy = "insurancePlan", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<InsurancePlanPrice> prices;
 
-    @OneToMany(mappedBy = "insurancePlan", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "insurancePlan", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<InsuranceBenefit> benefits;
 

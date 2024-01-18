@@ -30,6 +30,6 @@ public class InsurancePlanDTO {
 
     private int funeralAllowance;
     private List<InsurancePlanPrice> prices ;
-    private  List<InsuranceBenefitDTO> benefits;
+    private List<InsuranceBenefitDTO> benefits;
 }
 

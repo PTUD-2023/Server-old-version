@@ -29,7 +29,7 @@ public class RegistrationFormController {
 
     @GetMapping("/get")
     public ResponseEntity<?> getAllRegistrationForm() {
-        return ResponseEntity.status(HttpStatus.OK).body(registrationFormService.getAllRegistrationForm());
+        return ResponseEntity.status(HttpStatus.OK).body(registrationFormService.getAllRegistrationFormNotPaid());
     }
 
     @GetMapping("/get/{formId}")
@@ -56,19 +56,19 @@ public class RegistrationFormController {
         {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new CustomErrorResponse(HttpStatus.NOT_FOUND.value(),"RegistrationFormNotFound","Không thể tìm thấy đơn đăng kí",new Date()));
         }
-        registrationFormService.approveRegistrationForm(formId);
+        registrationFormService.updateStatusById(formId, "Approved");
         return ResponseEntity.status(HttpStatus.OK).body("Đơn đăng kí đã được duyệt thành công!!");
     }
 
-    @PutMapping("/cancel-form/{formId}")
+    @PutMapping("/refuse-form/{formId}")
     public ResponseEntity<?> cancelRegistrationForm(@PathVariable Long formId) {
         RegistrationFormDTO registrationForm = registrationFormService.getRegistrationFormDTOById(formId);
         if(registrationForm == null)
         {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new CustomErrorResponse(HttpStatus.NOT_FOUND.value(),"RegistrationFormNotFound","Không thể tìm thấy đơn đăng kí",new Date()));
         }
-        registrationFormService.cancelRegistrationForm(formId);
-        return ResponseEntity.status(HttpStatus.OK).body("Đơn đăng kí đã được hủy!!");
+        registrationFormService.updateStatusById(formId, "Refused");
+        return ResponseEntity.status(HttpStatus.OK).body("Đơn đăng kí đã bị từ chối!!");
     }
 
     @DeleteMapping("/delete/{formId}")
@@ -78,11 +78,11 @@ public class RegistrationFormController {
         {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new CustomErrorResponse(HttpStatus.NOT_FOUND.value(),"RegistrationFormNotFound","Không thể tìm thấy đơn đăng kí",new Date()));
         }
-        if (registrationForm.getStatus().equals("Approved"))
+        if (registrationForm.getStatus().equals("Paid"))
         {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CustomErrorResponse(HttpStatus.BAD_REQUEST.value(),"BadRequest","Đơn đăng kí đã được duyệt không thể bị xóa",new Date()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CustomErrorResponse(HttpStatus.BAD_REQUEST.value(),"BadRequest","Đơn đăng kí đã thanh toán không thể bị xóa",new Date()));
         }
         registrationFormService.removeRegistrationForm(formId);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.status(HttpStatus.OK).body("Xóa đơn đăng kí thành công!!");
     }
 }

@@ -1,7 +1,9 @@
 package com.example.insurance.service;
 
+import com.example.insurance.common.MapEntityToDTO;
 import com.example.insurance.dto.HealthInformationDTO;
 import com.example.insurance.entity.HealthInformation;
+import com.example.insurance.entity.RegistrationForm;
 import com.example.insurance.exception.CustomException;
 import com.example.insurance.repository.HealthInformationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,24 +23,29 @@ public class HealthInformationService {
         this.healthInformationRepository = healthInformationRepository;
     }
 
-    public Optional<HealthInformation> findHealthInformationById(Long id)
+    public HealthInformationDTO findHealthInformationDTOById(Long id)
     {
-        return healthInformationRepository.findById(id);
+        MapEntityToDTO mapEntityToDTO = MapEntityToDTO.getInstance();
+        Optional<HealthInformation> healthInformation = healthInformationRepository.findById(id);
+        return healthInformation.map(mapEntityToDTO::mapHealthInformationToDTO).orElse(null);
     }
 
-    public void addHealthInformation(HealthInformation healthInformation)
+    public void addHealthInformation(HealthInformationDTO healthInformationDTO)
     {
+        MapEntityToDTO mapEntityToDTO = MapEntityToDTO.getInstance();
+        HealthInformation healthInformation = mapEntityToDTO.mapDTOToHealthInformation(healthInformationDTO);
         healthInformationRepository.save(healthInformation);
     }
 
-    public void updateHealthInformation(Long id, HealthInformationDTO dto)
+    public void updateHealthInformation(Long id, HealthInformationDTO healthInformationDTO)
     {
         Optional<HealthInformation> optionalHealthInformation = healthInformationRepository.findById(id);
         if (optionalHealthInformation.isEmpty()) {
             throw new CustomException(HttpStatus.NOT_FOUND.value(), "NotFound","Thông tin sức khỏe không tồn tại!");
         }
 
-        HealthInformation healthInformation = mapDTOToHealthInformation(dto);
+        MapEntityToDTO mapEntityToDTO = MapEntityToDTO.getInstance();
+        HealthInformation healthInformation = mapEntityToDTO.mapDTOToHealthInformation(healthInformationDTO);
         healthInformation.setId(id);
         healthInformation.setCreatedAt(optionalHealthInformation.get().getCreatedAt());
         healthInformation.setUpdatedAt(new Date());
@@ -46,29 +53,4 @@ public class HealthInformationService {
         healthInformationRepository.save(healthInformation);
     }
 
-    public HealthInformation mapDTOToHealthInformation(HealthInformationDTO dto)
-    {
-        HealthInformation healthInformation = new HealthInformation();
-
-        healthInformation.setGeneralHealthCondition(dto.getGeneralHealthCondition());
-        healthInformation.setMedicalHistory(dto.getMedicalHistory());
-        healthInformation.setMedicinesAndTreatment(dto.getMedicinesAndTreatment());
-        healthInformation.setFamilyHistory(dto.getFamilyHistory());
-        healthInformation.setLifestyleAndRiskFactors(dto.getLifestyleAndRiskFactors());
-
-        return  healthInformation;
-    }
-
-    public HealthInformationDTO mapHealthInformationToDTO(HealthInformation healthInformation)
-    {
-        HealthInformationDTO dto = new HealthInformationDTO();
-
-        dto.setGeneralHealthCondition(healthInformation.getGeneralHealthCondition());
-        dto.setMedicalHistory(healthInformation.getMedicalHistory());
-        dto.setMedicinesAndTreatment(healthInformation.getMedicinesAndTreatment());
-        dto.setFamilyHistory(healthInformation.getFamilyHistory());
-        dto.setLifestyleAndRiskFactors(healthInformation.getLifestyleAndRiskFactors());
-
-        return dto;
-    }
 }

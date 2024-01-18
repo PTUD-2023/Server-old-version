@@ -1,8 +1,7 @@
 package com.example.insurance.entity;
 
-import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
@@ -10,7 +9,6 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @DynamicInsert
@@ -53,10 +51,10 @@ public class UserAccount {
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date timeUpdated;
-
-    @OneToMany(mappedBy = "userAccount", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RegistrationForm> forms;
-
-    @OneToMany(mappedBy = "userAccount", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ClaimRequest> claimRequests;
+//
+//    @OneToMany(mappedBy = "userAccount", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<RegistrationForm> forms;
+//
+//    @OneToMany(mappedBy = "userAccount", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<ClaimRequest> claimRequests;
 }

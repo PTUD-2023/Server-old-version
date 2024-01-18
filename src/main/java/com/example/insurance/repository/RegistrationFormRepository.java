@@ -13,6 +13,7 @@ import java.util.List;
 @Repository
 public interface RegistrationFormRepository extends CrudRepository<RegistrationForm, Long> {
     List<RegistrationForm> findAllByUserAccount_Id(Long id);
+    List<RegistrationForm> findAllByStatusNot(String status);
     @Modifying
     @Transactional
     @Query("UPDATE RegistrationForm rf SET rf.status = :status WHERE rf.id = :id")

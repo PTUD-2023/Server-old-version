@@ -1,13 +1,11 @@
 package com.example.insurance.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 
-@Getter
-@Setter
+@Data
 @JsonIgnoreProperties(value = {"password","status","timeUpdated","forms","claimRequests"})
 public class UserAccountDTO {
     private Long id;
@@ -22,4 +20,9 @@ public class UserAccountDTO {
     private String address;
     private Date timeCreated;
     private String role;
+
+    public UserAccountDTO(Long id)
+    {
+        this.id = id;
+    }
 }

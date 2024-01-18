@@ -15,12 +15,6 @@ import java.util.Date;
 @Data
 @ToString
 @JsonIdentityInfo(scope = RegistrationForm.class, generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
-//@NamedEntityGraph(name = "RegistrationForm.userAccountInsurancePlan",
-//                attributeNodes = {
-//                        @NamedAttributeNode(value = "userAccount"),
-//                        @NamedAttributeNode(value = "insurancePlan")
-//                }
-//)
 public class RegistrationForm {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +34,7 @@ public class RegistrationForm {
 
     private String note;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_account_id",referencedColumnName = "id")
     @ToString.Exclude
     private UserAccount userAccount;
@@ -52,7 +46,7 @@ public class RegistrationForm {
     @JoinColumn(name = "insured_person_id", referencedColumnName = "id")
     private InsuredPerson insuredPerson;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "insurance_plan_id", referencedColumnName = "id")
     @ToString.Exclude
     private InsurancePlan insurancePlan;

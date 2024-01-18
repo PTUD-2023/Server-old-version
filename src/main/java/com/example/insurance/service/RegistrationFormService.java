@@ -2,11 +2,9 @@ package com.example.insurance.service;
 
 import com.example.insurance.common.MapEntityToDTO;
 import com.example.insurance.dto.RegistrationFormDTO;
-import com.example.insurance.entity.*;
-import com.example.insurance.exception.CustomException;
-import com.example.insurance.repository.*;
+import com.example.insurance.entity.RegistrationForm;
+import com.example.insurance.repository.RegistrationFormRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,9 +21,10 @@ public class RegistrationFormService {
     }
 
     @Transactional
-    public Iterable<RegistrationFormDTO> getAllRegistrationForm() {
+    public List<RegistrationFormDTO> getAllRegistrationFormNotPaid() {
         MapEntityToDTO mapEntityToDTO = MapEntityToDTO.getInstance();
-        List<RegistrationForm> registrationFormList = (List<RegistrationForm>) registrationFormRepository.findAll();
+        List<RegistrationForm> registrationFormList = registrationFormRepository.findAllByStatusNot("Paid");
+//        return registrationFormList;
         return mapEntityToDTO.mapRegistrationFormToDTOList(registrationFormList);
     }
 
@@ -49,12 +48,8 @@ public class RegistrationFormService {
     }
 
     @Transactional
-    public void approveRegistrationForm(Long formId) {
-        registrationFormRepository.updateStatusById(formId, "Approved");
-    }
-
-    public void cancelRegistrationForm(Long formId) {
-        registrationFormRepository.updateStatusById(formId, "Cancelled");
+    public void updateStatusById(Long formId, String status) {
+        registrationFormRepository.updateStatusById(formId, status);
     }
 
     @Transactional

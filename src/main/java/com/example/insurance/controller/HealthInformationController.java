@@ -1,5 +1,6 @@
 package com.example.insurance.controller;
 
+import com.example.insurance.common.CustomErrorResponse;
 import com.example.insurance.dto.HealthInformationDTO;
 import com.example.insurance.entity.HealthInformation;
 import com.example.insurance.exception.CustomException;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.Optional;
 
 @RestController
@@ -25,39 +27,25 @@ public class HealthInformationController {
     @GetMapping("/{id}")
     public ResponseEntity<?> GetHealthInformationById(@PathVariable Long id)
     {
-        try {
-            Optional<HealthInformation> healthInformation = healthInformationService.findHealthInformationById(id);
-            if (healthInformation.isEmpty())
-            {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Thông tin sức khỏe không tồn tại!");
-            }
-            HealthInformationDTO dto = healthInformationService.mapHealthInformationToDTO(healthInformation.get());
-            return ResponseEntity.status(HttpStatus.OK).body(dto);
-        } catch (CustomException e) {
-            return ResponseEntity.status(e.getErrorCode()).body(e.getMessage());
+        HealthInformationDTO healthInformationDTO = healthInformationService.findHealthInformationDTOById(id);
+        if (healthInformationDTO == null)
+        {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new CustomErrorResponse(HttpStatus.NOT_FOUND.value(),"HealthInformationNotFound","Không thể tìm thấy thông tin sức khỏe!",new Date()));
         }
+        return ResponseEntity.status(HttpStatus.OK).body(healthInformationDTO);
     }
 
     @PostMapping("/create")
     public ResponseEntity<?> AddInformationHealth(@RequestBody HealthInformationDTO dto)
     {
-        try {
-            HealthInformation healthInformation = healthInformationService.mapDTOToHealthInformation(dto);
-            healthInformationService.addHealthInformation(healthInformation);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Thêm thông tin sức khỏe thành công!");
-        } catch (CustomException e) {
-            return ResponseEntity.status(e.getErrorCode()).body(e.getMessage());
-        }
+        healthInformationService.addHealthInformation(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Thêm thông tin sức khỏe thành công!");
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> UpdateInformationHealth(@PathVariable Long id, @RequestBody HealthInformationDTO dto)
     {
-        try {
-            healthInformationService.updateHealthInformation(id, dto);
-            return ResponseEntity.status(HttpStatus.OK).body("Cập nhật thông tin sức khỏe thành công!");
-        } catch (CustomException e) {
-            return ResponseEntity.status(e.getErrorCode()).body(e.getMessage());
-        }
+        healthInformationService.updateHealthInformation(id, dto);
+        return ResponseEntity.status(HttpStatus.OK).body("Cập nhật thông tin sức khỏe thành công!");
     }
 }

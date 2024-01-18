@@ -4,19 +4,17 @@ import com.example.insurance.dto.*;
 import com.example.insurance.entity.*;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Getter;
 
 import java.util.List;
 
 public class MapEntityToDTO {
     private static final ObjectMapper objectMapper = new ObjectMapper();
+    @Getter
     private static final MapEntityToDTO instance = new MapEntityToDTO();
 
     private MapEntityToDTO() {
-        // private constructor thực thi signleton pattern
-    }
-
-    public static MapEntityToDTO getInstance() {
-        return instance;
+        // private constructor thực thi singleton pattern
     }
 
     public UserAccountDTO mapUserAccountToDTO(UserAccount userAccount) {
@@ -61,5 +59,13 @@ public class MapEntityToDTO {
 
     public InsurancePolicy mapDTOToInsurancePolicy(InsurancePolicyDTO dto) {
         return objectMapper.convertValue(dto, InsurancePolicy.class);
+    }
+
+    public HealthInformation mapDTOToHealthInformation(HealthInformationDTO dto) {
+        return objectMapper.convertValue(dto, HealthInformation.class);
+    }
+
+    public HealthInformationDTO mapHealthInformationToDTO(HealthInformation healthInformation) {
+        return objectMapper.convertValue(healthInformation, HealthInformationDTO.class);
     }
 }
